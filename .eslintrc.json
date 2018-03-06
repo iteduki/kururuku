@@ -8,7 +8,8 @@
 
   "rules": {
     "linebreak-style": ["error","windows"],
-    "no-use-before-define": ["error", { "functions": false, "classes": false }],
-    "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}]
+    "no-use-before-define": ["error", { "functions": false, "classes": false, "variables": false }],
+    "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
+    "comma-dangle": 0
   }
 }
