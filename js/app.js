@@ -142,6 +142,7 @@ const piano = [
 const keyList = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const majorScale = [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1]; // Cメジャースケール。使用できるキーが1
 const minorScale = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0]; // Cマイナースケール。使用できるキーが1
+const ryukyuScale = [1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1]; // 琉球音階。使用できるキーが1
 
 
 function generateScaleKey(key, scale = 'major') {
@@ -158,6 +159,9 @@ function generateScaleKey(key, scale = 'major') {
       break;
     case 'minor':
       scaleList = minorScale;
+      break;
+    case 'ryukyu':
+      scaleList = ryukyuScale;
       break;
     default:
       break;
