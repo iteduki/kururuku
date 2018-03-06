@@ -1,0 +1,14 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "browser": true,
+    "jquery": true,
+    "es6": true
+  },
+
+  "rules": {
+    "linebreak-style": ["error","unix"],
+    "no-use-before-define": ["error", { "functions": false, "classes": false }],
+    "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}]
+  }
+}

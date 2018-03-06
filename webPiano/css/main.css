@@ -1,0 +1,33 @@
+
+.pianokey {
+  border: 1px solid #999;
+  cursor: pointer;
+  display: inline-block;
+  height: 200px;
+  width: calc(100% / 8 - 2px);
+  width: -webkit-calc(100% / 8 - 2px);
+}
+
+.sharp {
+  background-color: black;
+  height: 120px;
+  margin-left: -4%;
+  position: absolute;
+  width: 8%;
+}
+
+.none {
+  background-color: gray;
+}
+
+#piano {
+  margin: 50px auto;
+  max-width: 420px;
+  position: relative;
+}
+
+#scale {
+  margin: auto;
+  max-width: 420px;
+  text-align: center;
+}

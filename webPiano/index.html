@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="utf-8" />
+  <title>WebPiano</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="js/app.js" ></script>
+  
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+  <!-- https://q-az.net/web-audio-api-piano/ -->
+  <!-- 基本的にPCキーボードで鳴らすから1オクターブ分だけ表示してあればいい -->
+  <div id="piano">
+    <span class="pianokey"></span>
+    <span class="pianokey sharp"></span>
+    <span class="pianokey"></span>
+    <span class="pianokey sharp"></span>
+    <span class="pianokey"></span>
+    <span class="pianokey"></span>
+    <span class="pianokey sharp"></span>
+    <span class="pianokey"></span>
+    <span class="pianokey sharp"></span>
+    <span class="pianokey"></span>
+    <span class="pianokey sharp"></span>
+    <span class="pianokey"></span>
+  </div>
+  <div id="scale">
+    <select name="scale">
+      <option value="C">C</option>
+      <option value="C#">C#（D♭）</option>
+      <option value="D">D</option>
+      <option value="D#">D#（E♭）</option>
+      <option value="E">E</option>
+      <option value="F">F</option>
+      <option value="F#">F#（G♭）</option>
+      <option value="G">G</option>
+      <option value="G#">G#（A♭）</option>
+      <option value="A">A</option>
+      <option value="A#">A#（B♭）</option>
+      <option value="B">B</option>
+    </select>
+  </div>
+  <script>
+      
+    </script>
+</body>
