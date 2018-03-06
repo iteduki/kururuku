@@ -107,20 +107,16 @@ function initPiano() {
   }
 
   // ピアノの鍵盤を取得
-  const pianoKey = document.getElementsByClassName('pianokey');
+  const pianokey = $('#piano').children();
 
-  const pianoKeyL = pianoKey.length;
-  for (let i = 0; i < pianoKeyL; i++) {
-    // クロージャ
-    (function (i) {
-      pianoKey[i].addEventListener('click', (mouseEvent) => {
-        if (mouseEvent.target.className.indexOf('none') === -1) {
+  for (let i = 0; i < pianokey.length; i++) {
+    $(pianokey[i]).click((mouseEvent) => {
+      if (mouseEvent.target.className.indexOf('none') === -1) {
         // 鍵盤の位置で周波数を計算
-          const h = 442 * (2 ** ((1 / 12) * (i - 9)));
-          play(h);
-        }
-      }, false);
-    }(i));
+        const h = 442 * (2 ** ((1 / 12) * (i - 9)));
+        play(h);
+      }
+    });
   }
 }
 
