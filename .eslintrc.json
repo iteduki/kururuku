@@ -7,7 +7,7 @@
   },
 
   "rules": {
-    "linebreak-style": ["error","unix"],
+    "linebreak-style": ["error","windows"],
     "no-use-before-define": ["error", { "functions": false, "classes": false }],
     "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}]
   }
