@@ -1,53 +1,126 @@
 $(() => {
   $('select[name=key]').change(keyScaleChangeEventHandler);
   $('select[name=scale]').change(keyScaleChangeEventHandler);
-  // window.AudioContext = window.AudioContext || window.webkitAudioContext; // クロスブラウザ対応
-  // const audioCtx = new AudioContext();
 
-  // // 引数のヘルツの高さの音を出す関数
-  // function play(hz) {
-
-  //   // 正弦波の音を作成
-  //   const osciillator = audioCtx.createOscillator();
-
-  //   // ヘルツ（周波数）指定
-  //   osciillator.frequency.value = hz;
-
-  //   // 音の出力先
-  //   const audioDestination = audioCtx.destination;
-
-  //   // 出力先のスピーカーに接続
-  //   osciillator.connect(audioDestination);
-
-  //   // 音を出す
-  //   osciillator.start = osciillator.start || osciillator.noteOn; // クロスブラウザ対応
-  //   osciillator.start();
-
-  //   // 音を0.5秒後にストップ
-  //   setTimeout(() => {
-  //     osciillator.stop();
-  //   }, 500);
-  // }
-
-  // // ピアノの鍵盤を取得
-  // const pianoKey = document.getElementsByClassName('pianokey');
-
-  // // DOMのrenderのあとじゃないと0になるのでbodyタグ内の一番下に書くか、jquery.readyなどのhtml描画をに動作するところに書く
-  // // https://stackoverflow.com/questions/30211605/javascript-html-collection-showing-as-0-length
-  // const pianoKeyL = pianoKey.length;
-  // for (i = 0; i < pianoKeyL; i++) {
-
-  //   // クロージャ
-  //   (function (i) {
-  //     pianoKey[i].addEventListener('click', () => {
-
-  //       // 鍵盤の位置で周波数を計算
-  //       const h = 442 * Math.pow(2, (1 / 12) * (i - 9));
-  //       play(h);
-  //     }, false);
-  //   }(i));
-  // }
+  initKey();
+  initPiano();
 });
+
+const keymap = {
+  // Zキー = C4
+  90: 60,
+  // Sキー = C#4
+  83: 61,
+  // Xキー = D4
+  88: 62,
+  // Dキー = D#4
+  68: 63,
+  // Cキー = E4
+  67: 64,
+  // Vキー = F4
+  86: 65,
+  // Gキー = F#4
+  71: 66,
+  // Bキー = G4
+  66: 67,
+  // Hキー = G#4
+  72: 68,
+  // Nキー = A4
+  78: 69,
+  // Jキー = A#4
+  74: 70,
+  // Mキー = B4
+  77: 71
+};
+
+function initKey() {
+  window.AudioContext = window.AudioContext || window.webkitAudioContext; // クロスブラウザ対応
+  const audioContext = new AudioContext();
+  // キーダウンした際の処理
+  $(this).keydown((keyDownEvent) => {
+    // キー押しっぱなしの状態で発火した場合は、動作を終了する
+    if (keyDownEvent.repeat === true) {
+      return;
+    }
+    // 対応するキー以外が押されたら
+    if (!keymap[keyDownEvent.keyCode]) {
+      return;
+    }
+    // noneだったら発音しない
+    const keyIdx = keymap[keyDownEvent.keyCode] - 60;
+    if ($('#piano').children()[keyIdx].className.indexOf('none') !== -1) {
+      return;
+    }
+    // オシレーターを作成
+    const osciillatorNode = audioContext.createOscillator();
+    // MIDIノートナンバーを周波数に変換
+    // const freq = 440.0 * Math.pow(2.0, (keymap[keyDownEvent.keyCode] - 69.0) / 12.0);
+    const freq = 440.0 * (2.0 ** ((keymap[keyDownEvent.keyCode] - 69.0) / 12.0));
+    // オシレーターの周波数を決定
+    osciillatorNode.frequency.value = freq;
+    // オシレーターを最終出力に接続
+    osciillatorNode.connect(audioContext.destination);
+    // オシレーター動作
+    osciillatorNode.start();
+    // キーを離した際に音が止まるよう、イベントを登録する
+    document.addEventListener('keyup', checkKeyUp);
+    // キーを離したかどうかチェック
+    function checkKeyUp(keyUpEvent) {
+      // 離したキーが、押下したキーで無い場合は処理を行わない
+      if (keyUpEvent.keyCode !== keyDownEvent.keyCode) {
+        return;
+      }
+      // オシレーターを停止する
+      osciillatorNode.stop();
+      // 自身のイベントを削除
+      document.removeEventListener('keyup', checkKeyUp);
+    }
+  });
+}
+
+function initPiano() {
+  window.AudioContext = window.AudioContext || window.webkitAudioContext; // クロスブラウザ対応
+  const audioCtx = new AudioContext();
+
+  // 引数のヘルツの高さの音を出す関数
+  function play(hz) {
+    // 正弦波の音を作成
+    const osciillator = audioCtx.createOscillator();
+
+    // ヘルツ（周波数）指定
+    osciillator.frequency.value = hz;
+
+    // 音の出力先
+    const audioDestination = audioCtx.destination;
+
+    // 出力先のスピーカーに接続
+    osciillator.connect(audioDestination);
+
+    // 音を出す
+    osciillator.start = osciillator.start || osciillator.noteOn; // クロスブラウザ対応
+    osciillator.start();
+
+    // 音を0.5秒後にストップ
+    setTimeout(() => {
+      osciillator.stop();
+    }, 500);
+  }
+
+  // ピアノの鍵盤を取得
+  const pianoKey = document.getElementsByClassName('pianokey');
+
+  const pianoKeyL = pianoKey.length;
+  for (let i = 0; i < pianoKeyL; i++) {
+    // クロージャ
+    (function (i) {
+      pianoKey[i].addEventListener('click', () => {
+        // 鍵盤の位置で周波数を計算
+        const h = 442 * (2 ** ((1 / 12) * (i - 9)));
+        play(h);
+      }, false);
+    }(i));
+  }
+}
 
 function keyScaleChangeEventHandler() {
   const key = $('select[name=key]').val();
@@ -73,15 +146,15 @@ const piano = [
   'pianokey sharp',
   'pianokey',
   'pianokey sharp',
-  'pianokey',
+  'pianokey'
 ];
-const KeyList = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const keyList = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const majorScale = [1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1]; // Cメジャースケール。使用できるキーが1
 const minorScale = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0]; // Cマイナースケール。使用できるキーが1
 
 
 function generateScaleKey(key, scale = 'major') {
-  const startIdx = KeyList.indexOf(key);
+  const startIdx = keyList.indexOf(key);
 
   if (startIdx === -1) {
     return piano;
