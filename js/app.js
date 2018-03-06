@@ -1,5 +1,6 @@
 $(() => {
-  $('select[name=scale]').change(scaleChangeEventHandler);
+  $('select[name=key]').change(keyScaleChangeEventHandler);
+  $('select[name=scale]').change(keyScaleChangeEventHandler);
   // window.AudioContext = window.AudioContext || window.webkitAudioContext; // クロスブラウザ対応
   // const audioCtx = new AudioContext();
 
@@ -48,9 +49,10 @@ $(() => {
   // }
 });
 
-function scaleChangeEventHandler(event) {
-  const key = event.target.value;
-  const resultPiano = generateScaleKey(key);
+function keyScaleChangeEventHandler() {
+  const key = $('select[name=key]').val();
+  const scale = $('select[name=scale]').val();
+  const resultPiano = generateScaleKey(key, scale);
 
   // pianoのclassを書き換え
   const children = $('#piano').children();
@@ -80,6 +82,10 @@ const minorScale = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0]; // Cマイナースケ�
 
 function generateScaleKey(key, scale = 'major') {
   const startIdx = KeyList.indexOf(key);
+
+  if (startIdx === -1) {
+    return piano;
+  }
 
   let scaleList = (new Array(12)).fill(1);
   switch (scale) {
