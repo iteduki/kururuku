@@ -3,7 +3,6 @@ $(() => {
   $('select[name=scale]').change(keyScaleChangeEventHandler);
 
   initKey();
-  initPiano();
 });
 
 const keymap = {
@@ -54,7 +53,6 @@ function initKey() {
     // オシレーターを作成
     const osciillatorNode = audioContext.createOscillator();
     // MIDIノートナンバーを周波数に変換
-    // const freq = 440.0 * Math.pow(2.0, (keymap[keyDownEvent.keyCode] - 69.0) / 12.0);
     const freq = 440.0 * (2.0 ** ((keymap[keyDownEvent.keyCode] - 69.0) / 12.0));
     // オシレーターの周波数を決定
     osciillatorNode.frequency.value = freq;
@@ -63,7 +61,7 @@ function initKey() {
     // オシレーター動作
     osciillatorNode.start();
     // キーを離した際に音が止まるよう、イベントを登録する
-    document.addEventListener('keyup', checkKeyUp);
+    $(document).on('keyup', checkKeyUp);
     // キーを離したかどうかチェック
     function checkKeyUp(keyUpEvent) {
       // 離したキーが、押下したキーで無い場合は処理を行わない
@@ -73,25 +71,20 @@ function initKey() {
       // オシレーターを停止する
       osciillatorNode.stop();
       // 自身のイベントを削除
-      document.removeEventListener('keyup', checkKeyUp);
+      $(document).off('keyup', checkKeyUp);
     }
   });
-}
-
-function initPiano() {
-  window.AudioContext = window.AudioContext || window.webkitAudioContext; // クロスブラウザ対応
-  const audioCtx = new AudioContext();
 
   // 引数のヘルツの高さの音を出す関数
   function play(hz) {
     // 正弦波の音を作成
-    const osciillator = audioCtx.createOscillator();
+    const osciillator = audioContext.createOscillator();
 
     // ヘルツ（周波数）指定
     osciillator.frequency.value = hz;
 
     // 音の出力先
-    const audioDestination = audioCtx.destination;
+    const audioDestination = audioContext.destination;
 
     // 出力先のスピーカーに接続
     osciillator.connect(audioDestination);
