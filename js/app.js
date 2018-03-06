@@ -113,10 +113,12 @@ function initPiano() {
   for (let i = 0; i < pianoKeyL; i++) {
     // クロージャ
     (function (i) {
-      pianoKey[i].addEventListener('click', () => {
+      pianoKey[i].addEventListener('click', (mouseEvent) => {
+        if (mouseEvent.target.className.indexOf('none') === -1) {
         // 鍵盤の位置で周波数を計算
-        const h = 442 * (2 ** ((1 / 12) * (i - 9)));
-        play(h);
+          const h = 442 * (2 ** ((1 / 12) * (i - 9)));
+          play(h);
+        }
       }, false);
     }(i));
   }
